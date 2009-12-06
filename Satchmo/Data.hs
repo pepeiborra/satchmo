@@ -1,8 +1,8 @@
 module Satchmo.Data 
 
 ( CNF, cnf, clauses
-, Clause(..), clause, literals
-, Literal(..), literal, nicht
+, Clause, clause, literals
+, Literal, literal, literalInt, nicht
 )
 
 where
@@ -27,10 +27,10 @@ clause :: [ Literal ] -> Clause
 clause ls = Clause { literals = ls }
 
 
-newtype Literal = Literal Int
+newtype Literal = Literal { literalInt :: Int }
     deriving ( Eq, Ord )
 
-instance Show Literal where 
+instance Show Literal where
     show ( Literal i ) = show i
 
 literal :: Int -> Literal

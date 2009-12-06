@@ -78,11 +78,11 @@ satfresh_forall = do
     return $ literal n
 
 satemit :: Maybe Weight -> Clause -> SAT ()
-satemit w (Clause clause) = do
+satemit w c = do
     a <- get
     (h,maxW) <- ask
-    liftIO $ BS.hPut h (bshowClause $ Clause(Literal (fromMaybe maxW w) : clause))
+    liftIO $ BS.hPut h (bshowClause $ clause (literal (fromMaybe maxW w) : literals c))
     put $ a { size = size a + 1}
 
-  where bshowClause c = BS.pack (show c) `mappend` BS.pack "\n"
+  where bshowClause c = BS.pack (show c) `BS.snoc` '\n'
 
