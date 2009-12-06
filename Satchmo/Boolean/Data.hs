@@ -44,12 +44,15 @@ instance Ord Boolean where
   Constant{} `compare` Boolean{} = LT
 
 instance Enum Boolean where
-  fromEnum (Constant True)  = -1
-  fromEnum (Boolean lit dec) = literalInt lit
+  fromEnum (Constant True)  = 1
   fromEnum (Constant False) = 0
-  toEnum 0    = Constant False
-  toEnum (-1) = Constant True
-  toEnum l    = let x = literal l in Boolean x (asks $ \fm -> fromJust (M.lookup x fm))
+  fromEnum (Boolean lit dec) = if literalInt lit > 0 then literalInt lit + 1
+                                                     else literalInt lit - 1
+  toEnum 0 = Constant False
+  toEnum 1 = Constant True
+  toEnum (-1) = error "Enum Boolean: -1 is not a valid index"
+  toEnum l= let x = literal (if l>0 then l-1 else l+1)
+            in Boolean x (asks $ \fm -> fromJust (M.lookup x fm))
 
 type Booleans = [ Boolean ]
 
